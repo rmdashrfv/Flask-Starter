@@ -64,8 +64,17 @@ def login():
 
 
 @app.route('/users/<user_id>')
-def profile():
-    pass
+def profile(user_id):
+    user = User.query.get(user_id)
+    if user:
+        return {
+          'email': user.email,
+          'name': user.name
+        }
+    else:
+        return {
+          'error': 'No user found'
+        }
 
 
 if __name__ == '__main__':
