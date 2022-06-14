@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import Cookies from 'js-cookie'
 
 function App() {
   const [message, setMessage] = useState('Flask has not loaded yet! Check to make sure you ran flask run in the root directory.')
+  const [user, setUser] = useState(null)
   
   const submit = async (e) => {
     e.preventDefault()
@@ -23,6 +25,15 @@ function App() {
     })
     let res = await req.json()
     console.log('Response', res)
+    if (req.ok && res.user) {
+      Cookies.set('auth-token', res.auth_token, {expires: 1})
+      setUser(res.user)
+    }
+  }
+
+  const logout = () => {
+    setUser(null)
+    Cookies.remove('auth-token')
   }
   
   useEffect(() => {
@@ -47,6 +58,11 @@ function App() {
       <p>{message}</p>
       <p>Edit the server in <code>app.py</code></p>
       <p>Edit the client in <code>/client/src/App.js</code></p>
+      <p>
+        {
+          user ? `Logged in as ${user.email}` : 'Not logged in'
+        }
+      </p>
       <form id="signup-form" onSubmit={submit}>
         <input type="text" name="name" /><br />
         <input type="email" name="email" /><br />

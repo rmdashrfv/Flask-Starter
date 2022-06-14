@@ -68,8 +68,9 @@ def login():
         return {
             'user': {
                'email': user.email,
-               'name': user.name 
-            }
+               'name': user.name
+            },
+            'auth_token': 'test_token'
         }
     else:
         return {
