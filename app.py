@@ -1,7 +1,8 @@
 from flask import Flask
+from os import environ
 from flask_sqlalchemy import SQLAlchemy
-# jwt
-# bcrypt
+import bcrypt
+import jwt
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres//mlaw:cjiaang11@localhost/flask_starter_test_db'
@@ -12,21 +13,41 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
+    name = db.Column(db.String(64))
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+
 
 class Post(db.Model):
-    pass
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text(), nullable=False)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
 
 
 @app.route('/status')
 def home():
     return {
-        'message': 'Congratulations! Flask Starter is all set up!'
+      'message': 'Congratulations! Flask Starter is all set up!'
     }
+
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    return {
+      'message': 'Signup complete!'
+    }
+
 
 @app.route('/login', methods=['POST'])
 def login():
     pass
 
 
+@app.route('/users/<user_id>')
+def profile():
+    pass
+
+
 if __name__ == '__main__':
-    app.run(host='localhost', port=5050)
+    app.run(host='localhost', port=environ.get('PORT', 5050))
