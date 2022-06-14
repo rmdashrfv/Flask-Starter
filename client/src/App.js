@@ -1,21 +1,20 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
 function App() {
   const [message, setMessage] = useState('Flask has not loaded yet! Check to make sure you ran flask run in the root directory.')
   
   useEffect(() => {
     const load = async () => {
-    try {
-      let req = await fetch('/')
-      let res = await req.json()
-      console.log('Res', res)
-      if (req.ok) {
-	setMessage(res.message)
-      }
-    } catch (e) {
-      // alert(e.message)
-      console.log('ERR', e.message)
-    }
+      try {
+	 let req = await fetch('/status')
+	 let res = await req.json()
+	 if (req.ok) {
+           setMessage(res.message)
+	 }
+       } catch (e) {
+         alert('Flask server is not running. Check the console for more information')
+	 console.log('ERR', e.message)
+       }
     }
     load()
   }, [])
