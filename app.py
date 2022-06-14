@@ -14,4 +14,14 @@ class User(db.Model):
 
 @app.route('/')
 def home():
-    return {'message': 'Congratulations! Flask Starter is all set up!'}
+    return {
+        'message': 'Congratulations! Flask Starter is all set up!'
+       }
+
+@app.route('/login', methods=['POST'])
+def login():
+    pass
+
+
+if __name__ == '__main__':
+    app.run(host='localhost', port=5050)

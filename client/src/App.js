@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from 'react'
 
 function App() {
+  const [message, setMessage] = useState('Flask has not loaded yet! Check to make sure you ran flask run in the root directory.')
+  
+  useEffect(() => {
+    const load = async () => {
+    try {
+      let req = await fetch('/')
+      let res = await req.json()
+      console.log('Res', res)
+      if (req.ok) {
+	setMessage(res.message)
+      }
+    } catch (e) {
+      // alert(e.message)
+      console.log('ERR', e.message)
+    }
+    }
+    load()
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
+      <h1>Flask + React = ❤️</h1>
+      <p>{message}</p>
+      <p>Edit the server in <code>app.py</code></p>
+      <p>Edit the client in <code>/client/src/App.js</code></p>
     </div>
   );
 }
