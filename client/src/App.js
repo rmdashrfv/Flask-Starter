@@ -13,6 +13,17 @@ function App() {
     let res = await req.json()
     console.log('Response', res)
   }
+
+  const login = async (e) => {
+    e.preventDefault()
+    let form = new FormData(document.getElementById('login-form'))
+    let req = await fetch('/login', {
+      method: 'POST',
+      body: form
+    })
+    let res = await req.json()
+    console.log('Response', res)
+  }
   
   useEffect(() => {
     const load = async () => {
@@ -37,9 +48,16 @@ function App() {
       <p>Edit the server in <code>app.py</code></p>
       <p>Edit the client in <code>/client/src/App.js</code></p>
       <form id="signup-form" onSubmit={submit}>
+        <input type="text" name="name" /><br />
         <input type="email" name="email" /><br />
-	<input type="password" name="password" /><br />
+	      <input type="password" name="password" /><br />
         <input type="submit" value="Create Account" />
+      </form>
+      <hr />
+      <form id="login-form" onSubmit={login}>
+        <input type="email" name="email" /><br />
+        <input type="password" name="password" /><br />
+        <input type="submit" value="Log in" />
       </form>
     </div>
   );

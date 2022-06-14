@@ -19,7 +19,8 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
 
-    def __init__(self, email, password):
+    def __init__(self, name, email, password):
+        self.name = name
         self.email = email
         self.password = password
 
@@ -49,7 +50,7 @@ def home():
 @app.route('/signup', methods=['POST'])
 def signup():
     data = request.form
-    user = User(data['email'], data['password'])
+    user = User(data['name'], data['email'], data['password'])
     # encrypt password here
     db.session.add(user)
     db.session.commit()
@@ -60,10 +61,23 @@ def signup():
 
 @app.route('/login', methods=['POST'])
 def login():
-    pass
+    given_email = request.form.get('email')
+    given_password = request.form.get('password')
+    user = User.query.filter_by(email=given_email).first()
+    if user and given_password == user.password:
+        return {
+            'user': {
+               'email': user.email,
+               'name': user.name 
+            }
+        }
+    else:
+        return {
+            'error': 'Invalid email or password'
+        }
 
 
-@app.route('/users/<user_id>')
+@app.route('/users/<int:user_id>')
 def profile(user_id):
     user = User.query.get(user_id)
     if user:
@@ -75,6 +89,11 @@ def profile(user_id):
         return {
           'error': 'No user found'
         }
+
+
+@app.route('/posts')
+def posts():
+    pass
 
 
 if __name__ == '__main__':
