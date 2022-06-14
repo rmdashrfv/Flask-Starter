@@ -11,8 +11,9 @@ db = SQLAlchemy(app)
 
 
 class User(db.Model):
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    email = db.Column(db.String(120), index=True, unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     name = db.Column(db.String(64))
     created_at = db.Column(db.DateTime, server_default=db.func.now())
@@ -24,6 +25,7 @@ class User(db.Model):
 
 
 class Post(db.Model):
+    __tablename__ = 'posts'
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text(), nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
