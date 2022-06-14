@@ -39,6 +39,7 @@ class Post(db.Model):
 # db.engine.table_names is deprecated
 if 'users' not in db.engine.table_names():
     db.create_all()
+    
 
 @app.route('/status')
 def home():
@@ -76,6 +77,12 @@ def login():
         return {
             'error': 'Invalid email or password'
         }
+
+
+@app.route('/authenticate')
+def authenticate():
+    # auth user with token
+    pass
 
 
 @app.route('/users/<int:user_id>')
